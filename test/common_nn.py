@@ -350,6 +350,7 @@ class NNTestCase(TestCase):
         if isinstance(input, Variable):
             if input.requires_grad and input.grad is not None:
                 input.grad.data.zero_()
+                input.grad.detach_()
         elif torch.is_tensor(input):
             return
         else:
@@ -410,7 +411,6 @@ class NNTestCase(TestCase):
             return out
 
         res = tuple()
-        # TODO: enable non-contig tests
         input = contiguous(input)
         if jacobian_input:
             res += get_numerical_jacobian(fw, input, input, eps=1e-6),
